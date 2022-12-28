@@ -1,0 +1,163 @@
+BDD - behavioral driven development Approach-
+ It allows us to write scenarios in gherkin language
+ In gherkin language the first thing in automation is feature
+
+   Feature - It is all about the user story where we write high level information, def of user story
+        Scenario - In Scenario we write the Test case -every test case will be considered as scenario in BDD
+        Inside the scenario we have steps and tags:
+        Given - pre-requisite/pre-condition
+        When - perform actions
+        Then - Expected output
+        And - Supporting tag
+
+  Feature-file-->feature-->Scenario-->Steps (it calls step declaration and we write it under the .feature extension file)
+
+  1- Step declaration
+  2-Step definition
+  In order to get Step definition, we need class to keep our Step definition there.
+
+     Step definition - Cucumber provides you the snippet of step definition
+        In step definition, we write the code to perform actions which has been written in
+        the BDD statement
+
+    example:
+    This is the structure of step definition
+         @Given("user is navigated to HRMS application")
+         WebDriverManager.chromedriver().setup();
+         driver=new ChromeDriver();
+         driver.get("http://hrm.syntaxtechs.net/humanresources/symfony/web/index.php/auth/login");
+         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+         driver.manage().window().maximize();
+
+   This is the statement that we have provided over there in the feature file
+         @Given("user is navigated to HRMS application")
+
+   Base on the above statement cucumber create step def with this snippet
+   What ever code we want to write, we will write under this block of codes
+           WebDriverManager.chromedriver().setup();
+           driver=new ChromeDriver();
+           driver.get("http://hrm.syntaxtechs.net/humanresources/symfony/web/index.php/auth/login");
+           driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+           driver.manage().window().maximize();
+
+Until now when want to run our feature class we go to the same feature class and run them individually from there
+it means we can not execute feature file individually
+in order to achieve this problem in framework we need an individual class for that which call it runner class
+ To execute all the feature files from one class, we need runner class
+
+ Runner class:
+
+  Cucumber need support of junit to run the test cases. In Runer class we are not touching the main class. we worked after
+  the package.
+
+@RunWith(Cucumber.class)
+@CucumberOptions(
+        features we use to provide the path of all the feature files
+               features = "src/test/resources/features/",
+               glue = "steps",
+
+        when you set dry run to tru, it stops actual execution, and give us the missing step definition
+        it will quickly scan all the gherkin whether steps they are implemented or not
+        when we set dry run to false, it starts execution again
+              dryRun = false,
+              tags = "@tc1103",
+
+        to remove irrelevant from console, you need to set monochrome true
+              monochrome = true,
+
+        pretty keywords the steps in the console to increase
+              plugin = {"pretty"}
+
+To keep everything organised we need framework -
+Framework allows you to write simplified and organised code and
+it provides folder to structure which is easily understandable
+
+In framework we have 2 separate branches for
+Java -  In java, we write all java classes
+Non - Java - In non-java, we write non java part such as features, files etc
+
+steps package - for all step definitions
+runners package - for all runner classes
+config directory - for all config files
+features directory - for all feature files
+
+In order to make our framework organize, we should create separate packages for all our classes
+
+For example:
+
+       1-steps package for all step def classes
+       2-runner package for all the runner classes
+       3-feature directory for all the feature files
+
+
+In framework we have two things
+
+    1-Java part
+        steps
+        runner
+        utils
+        pages
+
+    2-None Java part(directory)
+        resources
+            feature d
+             config d
+
+UndefinedStepException:
+   If we don't connect our step dec with step def we get this erro
+   in order to do that we have the glue tage in cucumber. inside the "" we put the package name which we want to connect
+Example:
+  features = "src/test/resources/features/",
+                glue = "steps",
+
+Properties File
+ Generally in industry we deal whith two types of environments
+    1-Developers environment
+    2-QA/Test environment
+    3-Staging environment
+    4-Production environment
+
+  We generally tes our manually script or automation script in QA/Test environment
+  We should always avoid hardcoding.
+   Therefore we need something to work against all the above environment
+
+  we need to find a way to
+    1-use different url
+    2-different browser
+    3-different credentials
+
+   this is called data parametrization testing
+   when we want to pass all above 4 things we need a specific file which is called properties file
+   .properties is the extension of file
+
+   for example
+   in term of keys and values
+
+   browser = chrome
+   url = http://hrm.syntaxtechs.net/humanresources/symfony/web/index.php/auth/login
+   username = admin
+   password = Hum@nhrm123
+
+   This property file is not common for one specific scenario. it is common for all or the entire scenarios because every
+    single test case start from one step. it is opening the browser and launching the application
+    Opening the browser and launching the application is common for every single case
+
+    Utilities
+    What ever is common for the complete framework we keep them under utilities
+    1- CommonMethod: To put all the methods which are common for our project we write them here
+    2- ConfigReader: whenever we want to read the data we call this method
+    3- Constants: To keep all the path of all the file which are not changing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
